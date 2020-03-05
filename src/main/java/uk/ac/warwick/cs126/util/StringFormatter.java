@@ -1,5 +1,5 @@
 package uk.ac.warwick.cs126.util;
-import uk.ac.warwick.cs126.structures.CharacterHashMap;
+import uk.ac.warwick.cs126.structures.HashMap;
 
 public class StringFormatter {
     private static final String[][] accentAndConvertedAccent = {
@@ -1488,26 +1488,26 @@ public class StringFormatter {
         {"ⅿ", "m"},
     };
 
+    private static final HashMap<String, String> accentHashMap;
+
     static {
         // Initialise things here
         int size = accentAndConvertedAccent.length;
-        CharacterHashMap accentHashMap = new CharacterHashMap();
-        /*for (int i = 0; i < size; i++) {
+        accentHashMap = new HashMap<String, String>();
+        for (int i = 0; i < size; i++) {
             accentHashMap.add(accentAndConvertedAccent[i][0],
             accentAndConvertedAccent[i][1]);
-        }*/
+        }
     }
 
-
-    //Check if a character is not in the alphabet
-    //If not, search some data structure holding what the accent array holds
-    //E.g. use a hash map instead
-    //Search for the key in the structure and return whatever letter in the
-    //alphabet it's to be replaced by
-    //Done!
     public static String convertAccentsFaster(String str) {
-        // TODO
-        return "";
+        String replacedString = "";
+        for (int i = 0; i < str.length(); i++) {
+            String convertedAccent = accentHashMap.get(str.charAt(i) + "");
+            replacedString += convertedAccent;
+        }
+
+        return replacedString;
     }
 
     public static String convertAccents(String str) {

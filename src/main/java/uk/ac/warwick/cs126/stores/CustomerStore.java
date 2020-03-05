@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import org.apache.commons.io.IOUtils;
 
 import uk.ac.warwick.cs126.structures.MyArrayList;
+import uk.ac.warwick.cs126.structures.BinarySearchTree;
+import uk.ac.warwick.cs126.structures.HashMap;
 
 import uk.ac.warwick.cs126.util.DataChecker;
 import uk.ac.warwick.cs126.util.StringFormatter;
@@ -19,11 +21,15 @@ public class CustomerStore implements ICustomerStore {
 
     private MyArrayList<Customer> customerArray;
     private DataChecker dataChecker;
+    private BinarySearchTree<Long, Customer> customers;
+    private HashMap<Long, Customer> blacklistedIDs;
 
     public CustomerStore() {
         // Initialise variables here
         customerArray = new MyArrayList<>();
         dataChecker = new DataChecker();
+        customers = new BinarySearchTree<Long, Customer>();
+        blacklistedIDs = new HashMap<Long, Customer>();
     }
 
     public Customer[] loadCustomerDataToArray(InputStream resource) {
@@ -81,22 +87,43 @@ public class CustomerStore implements ICustomerStore {
 
     public boolean addCustomer(Customer customer) {
         // TODO
+        if (dataChecker.isValid(customer)) {
+            if (blacklistedIDs.get(customer.getID()) == null) {
+                if (customers.add(customer.getID(), customer) == false) {
+                    blacklistedIDs.add(customer.getID(), customer);
+                    customers.remove(customer.getID());
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }
+        }
         return false;
     }
 
     public boolean addCustomer(Customer[] customers) {
-        // TODO
-        return false;
+        boolean returnValue = false;
+        for (int i = 0; i < customers.length; i++) {
+            returnValue = addCustomer(customers[i]);
+        }
+        return returnValue;
     }
 
     public Customer getCustomer(Long id) {
-        // TODO
-        return null;
+        return customers.get(id);
     }
 
     public Customer[] getCustomers() {
-        // TODO
-        return new Customer[0];
+        Customer[] sortedArray = new Customer[customers.getSize()];
+        customers.inOrder(customers.getRoot());
+        for (int i = 1; i <= customers.getSize(); i++) {
+            sortedArray[customers.getSize() - i] = customers.getNodes().get(i - 1).getValue();
+        }
+        return sortedArray;
     }
 
     public Customer[] getCustomers(Customer[] customers) {
