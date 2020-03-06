@@ -149,11 +149,18 @@ public class CustomerStore implements ICustomerStore {
         // TODO
         // String searchTermConverted = stringFormatter.convertAccents(searchTerm);
         String searchTermConvertedFaster = StringFormatter.convertAccentsFaster(searchTerm);
-        MyArrayList<Customer> matchedCustomersList = BinarySearchTree.inOrderSearch(customers.getRoot(), new MyArrayList<>(), searchTermConvertedFaster);
+        /*MyArrayList<Customer> matchedCustomersList = BinarySearchTree.inOrderSearch(customers.getRoot(), new MyArrayList<>(), searchTermConvertedFaster);
         MyArrayList<Customer> sortedCustomersList = Sorter.quickSortCustomersName(matchedCustomersList);
         Customer[] sortedArray = new Customer[sortedCustomersList.size()];
         for (int i = 0; i < sortedCustomersList.size(); i++) {
             sortedArray[i] = sortedCustomersList.get(i);
+        }*/
+        BinarySearchTree<String, Customer> customersByNameTree = new BinarySearchTree<>();
+        BinarySearchTree.inOrderSearch(customers.getRoot(), customersByNameTree, searchTermConvertedFaster);
+        MyArrayList<Pair<String, Customer>> sortedList = BinarySearchTree.inOrder(customersByNameTree.getRoot(), new MyArrayList<>());
+        Customer[] sortedArray = new Customer[customersByNameTree.getSize()];
+        for (int i = 0; i < sortedList.size(); i++) {
+            sortedArray[i] = sortedList.get(i).getValue();
         }
         return sortedArray;
         /*BinarySearchTree<String, Customer> byNameTree = new BinarySearchTree<>();

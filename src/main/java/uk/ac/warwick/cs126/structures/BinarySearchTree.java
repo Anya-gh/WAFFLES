@@ -110,15 +110,67 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
                 }
             }
             else {
-                // node with that key already exists
-                returnValue = false;
-                break;
+                if ((value instanceof Customer) && (key instanceof String)) {
+                    Customer addCustomer = (Customer) value;
+                    Customer currentCustomer = (Customer) temp.getValue().getValue();
+                    String firstName = addCustomer.getFirstName();
+                    String currentFirstName = currentCustomer.getFirstName();
+                    if (firstName.compareTo(currentFirstName) < 0) {
+                        if (temp.getPrevious() == null) {
+                            temp.setPrevious(newNode);
+                            size++;
+                            break;
+                        }
+                        else {
+                            temp = temp.getPrevious();
+                        }
+                    }
+                    else if (firstName.compareTo(currentFirstName) > 0) {
+                        if (temp.getNext() == null) {
+                            temp.setNext(newNode);
+                            size++;
+                            break;
+                        }
+                        else {
+                            temp = temp.getNext();
+                        }
+                    }
+                    else {
+                        Long ID = addCustomer.getID();
+                        Long currentID = currentCustomer.getID();
+                        if (ID.compareTo(currentID) < 0) {
+                            if (temp.getPrevious() == null) {
+                                temp.setPrevious(newNode);
+                                size++;
+                                break;
+                            }
+                            else {
+                                temp = temp.getPrevious();
+                            }
+                        }
+                        else if (ID.compareTo(currentID) > 0) {
+                            if (temp.getNext() == null) {
+                                temp.setNext(newNode);
+                                size++;
+                                break;
+                            }
+                            else {
+                                temp = temp.getNext();
+                            }
+                        }
+                        else {
+                            // the customer already exists
+                            returnValue = false;
+                            break;
+                        }
+                    }
+                }
             }
         }
         return returnValue;
     }
 
-    public static BinarySearchTree<String, Customer> add(Customer customer, BinarySearchTree<String, Customer> customerBST) {
+    /*public static BinarySearchTree<String, Customer> add(Customer customer, BinarySearchTree<String, Customer> customerBST) {
         ListElement<Pair<String, Customer>> temp = customerBST.getRoot();
         ListElement<Pair<String, Customer>> newNode = new ListElement<Pair<String, Customer>>(new Pair<String, Customer>(customer.getLastName(), customer));
         if (temp == null) {
@@ -211,7 +263,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
             }
         }
         return customerBST;
-    }
+    }*/
 
     /*public static void inOrderSearch(ListElement<Pair<Long, Customer>> node, BinarySearchTree<Long, Customer> customerTree, BinarySearchTree<String, Customer> newTree, String term) {
         if (node != null) {
@@ -242,6 +294,28 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
         MyArrayList<Customer> returnArrayList = MyArrayList.concat(MyArrayList.concat(leftArrayList, currentNode), rightArrayList); 
         return returnArrayList;
     }
+
+    public static void inOrderSearch(ListElement<Pair<Long, Customer>> node, BinarySearchTree<String, Customer> tree, String searchTerm) {
+        if (node != null) {
+            String checkValue = (node.getValue().getValue().getFirstName() + " " + node.getValue().getValue().getLastName()).toLowerCase();
+            String checkTerm = searchTerm.toLowerCase();
+            // left tree
+            inOrderSearch(node.getPrevious(), tree, searchTerm);
+            // current
+            if (checkValue.contains(checkTerm)) {
+                Customer customer = node.getValue().getValue();
+                tree.add(customer.getLastName(), customer);
+            }
+            // right tree
+            inOrderSearch(node.getNext(), tree, searchTerm);
+        }
+    }
+
+    /*public static <K extends Comparable<K>> void inOrder((ListElement<Pair<K, Customer>> node, Customer[] customerArray, int count) {
+        if (node != null) {
+
+        }
+    }*/
     
 
     public V get(K key) {

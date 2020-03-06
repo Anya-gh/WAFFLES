@@ -8,7 +8,7 @@ public class MyArrayList<E> {
 
     public MyArrayList() {
         // Initialise variables
-        this.capacity = 1000;
+        this.capacity = 50000;
         this.array = new Object[capacity];
         this.size = 0;
     }
