@@ -48,6 +48,9 @@ public class Sorter {
         for (int i = 0; i < customers.length; i++) {
             customerArrayList.add(customers[i]);
         }
+        for (int i = 0; i < customerArrayList.size(); i++) {
+            System.out.println(customerArrayList.get(i).getLastName());
+        }
         customerArrayList = quickSortCustomersName(customerArrayList);
         Customer[] sortedArray = new Customer[customerArrayList.size()];
         for (int i = 0; i < customerArrayList.size(); i++) {

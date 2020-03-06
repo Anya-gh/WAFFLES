@@ -282,6 +282,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
             }
             else {
                 temp.setActive(false);
+                size--;
             }
         }
     }
