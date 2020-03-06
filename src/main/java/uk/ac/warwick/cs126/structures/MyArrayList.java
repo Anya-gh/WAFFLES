@@ -14,7 +14,7 @@ public class MyArrayList<E> {
     }
 
     private MyArrayList(Object[] constructorArray) {
-        this.capacity = 1000;
+        this.capacity = 50000;
         this.array = new Object[capacity];
         System.arraycopy(constructorArray, 0, this.array, 0, constructorArray.length);
         this.size = constructorArray.length;

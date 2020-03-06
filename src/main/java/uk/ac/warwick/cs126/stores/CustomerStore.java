@@ -121,10 +121,11 @@ public class CustomerStore implements ICustomerStore {
 
     public Customer[] getCustomers() {
         Customer[] sortedArray = new Customer[customers.getSize()];
-        MyArrayList<Pair<Long, Customer>> arrayList = BinarySearchTree.inOrder(customers.getRoot(), new MyArrayList<>());
+        /*MyArrayList<Pair<Long, Customer>> arrayList = BinarySearchTree.inOrder(customers.getRoot(), new MyArrayList<>());
         for (int i = 0; i < arrayList.size(); i++) {
             sortedArray[i] = arrayList.get(i).getValue();
-        }
+        }*/
+        BinarySearchTree.inOrder(customers.getRoot(), sortedArray, 0);
         return sortedArray;
     }
 
@@ -134,10 +135,11 @@ public class CustomerStore implements ICustomerStore {
 
     public Customer[] getCustomersByName() {
         Customer[] sortedArray = new Customer[customers.getSize()];
-        MyArrayList<Pair<Long, Customer>> arrayList = BinarySearchTree.inOrder(customers.getRoot(), new MyArrayList<>());
+        /*MyArrayList<Pair<Long, Customer>> arrayList = BinarySearchTree.inOrder(customers.getRoot(), new MyArrayList<>());
         for (int i = 0; i < arrayList.size(); i++) {
             sortedArray[i] = arrayList.get(i).getValue();
-        }
+        }*/
+        BinarySearchTree.inOrder(customers.getRoot(), sortedArray, 0);
         return Sorter.quickSortCustomersName(sortedArray);
     }
 
@@ -157,11 +159,12 @@ public class CustomerStore implements ICustomerStore {
         }*/
         BinarySearchTree<String, Customer> customersByNameTree = new BinarySearchTree<>();
         BinarySearchTree.inOrderSearch(customers.getRoot(), customersByNameTree, searchTermConvertedFaster);
-        MyArrayList<Pair<String, Customer>> sortedList = BinarySearchTree.inOrder(customersByNameTree.getRoot(), new MyArrayList<>());
+        //MyArrayList<Pair<String, Customer>> sortedList = BinarySearchTree.inOrder(customersByNameTree.getRoot(), new MyArrayList<>());
         Customer[] sortedArray = new Customer[customersByNameTree.getSize()];
-        for (int i = 0; i < sortedList.size(); i++) {
+        BinarySearchTree.inOrder(customersByNameTree.getRoot(), sortedArray, 0);
+        /*for (int i = 0; i < sortedList.size(); i++) {
             sortedArray[i] = sortedList.get(i).getValue();
-        }
+        }*/
         return sortedArray;
         /*BinarySearchTree<String, Customer> byNameTree = new BinarySearchTree<>();
         BinarySearchTree.inOrderSearch(customers.getRoot(), customers, byNameTree, searchTermConvertedFaster);
