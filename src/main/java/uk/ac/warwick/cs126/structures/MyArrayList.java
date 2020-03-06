@@ -13,6 +13,13 @@ public class MyArrayList<E> {
         this.size = 0;
     }
 
+    private MyArrayList(Object[] constructorArray) {
+        this.capacity = 1000;
+        this.array = new Object[capacity];
+        System.arraycopy(constructorArray, 0, this.array, 0, constructorArray.length);
+        this.size = constructorArray.length;
+    }
+
     public boolean add(E element) {
         // Adds element to the array, returns true on success and false otherwise.
         // Doubles the array size when reached capacity
@@ -32,6 +39,27 @@ public class MyArrayList<E> {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static <T>MyArrayList<T> concat(MyArrayList<T> arrayList1, MyArrayList<T> arrayList2) {
+        if (arrayList1 == null) {
+            return arrayList2;
+        }
+        else if (arrayList2 == null) {
+            return arrayList1;
+        }
+        Object[] array1 = arrayList1.getArray();
+        Object[] array2 = arrayList2.getArray();
+        Object[] returnArray = new Object[arrayList1.size() + arrayList2.size()];
+        System.arraycopy(array1, 0, returnArray, 0, arrayList1.size());
+        System.arraycopy(array2, 0, returnArray, arrayList1.size(), arrayList2.size());
+        return new MyArrayList<T>(returnArray);
+    }
+
+    public Object[] getArray() {
+        Object[] returnArray = new Object[size];
+        System.arraycopy(this.array, 0, returnArray, 0, size);
+        return returnArray;
     }
 
     public boolean contains(E element) {

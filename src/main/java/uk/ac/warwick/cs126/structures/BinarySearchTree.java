@@ -1,63 +1,75 @@
 package uk.ac.warwick.cs126.structures;
 
+import uk.ac.warwick.cs126.models.Customer;
+
 public class BinarySearchTree<K extends Comparable<K>, V> {
     private ListElement<Pair<K, V>> root;
-    private MyArrayList<Pair<K, V>> nodes;
     private int size;
     public BinarySearchTree() {
-        nodes = new MyArrayList<>();
+        size = 0;
     }
 
     /*public static void main(String[] args) {
         BinarySearchTree<Integer, String> BST = new BinarySearchTree<Integer,String>();
+        MyArrayList<Pair<Integer, String>> myList = new MyArrayList<>();
         BST.add(10, "albert");
         BST.add(5, "lana");
         BST.add(12, "anya");
         BST.add(14, "iris");
         BST.add(11, "serena");
         System.out.println(BST.getSize());
+        myList = BST.inOrder(BST.getRoot(), new MyArrayList<>());
+        for (int i = 0; i < myList.size(); i++) {
+            System.out.println(myList.get(i).getValue());
+        }
         BST.remove(12);
         BST.remove(11);
         BST.remove(14);
         BST.remove(5);
         System.out.println(BST.getSize());
+        myList = BST.inOrder(BST.getRoot(), new MyArrayList<>());
+        for (int i = 0; i < myList.size(); i++) {
+            System.out.println(myList.get(i).getValue());
+        }
         BST.add(34, "dawn");
         BST.add(24, "lillie");
         BST.add(11, "serena");
         System.out.println(BST.getSize());
+        myList = BST.inOrder(BST.getRoot(), new MyArrayList<>());
+        for (int i = 0; i < myList.size(); i++) {
+            System.out.println(myList.get(i).getValue());
+        }
         BST.remove(11);
         BST.remove(10);
-        BST.inOrder(BST.getRoot());
         BST.add(11, "serena");
-        BST.inOrder(BST.getRoot());
         System.out.println(BST.getSize());
+        myList = BST.inOrder(BST.getRoot(), new MyArrayList<>());
+        for (int i = 0; i < myList.size(); i++) {
+            System.out.println(myList.get(i).getValue());
+        }
     }*/
 
     public ListElement<Pair<K, V>> getRoot() {
         return root;
     }
 
-    public MyArrayList<Pair<K, V>> getNodes() {
-        return nodes;
-    }
-
-    private void setNodes(MyArrayList<Pair<K, V>> newArrayList) {
-        nodes = newArrayList;
+    public void setRoot(ListElement<Pair<K, V>> newRoot) {
+        this.root = newRoot;
     }
 
     public int getSize() {
         return size;
     }
-    
-    public int size() {
-        this.setNodes(new MyArrayList<>());
-        this.inOrder(this.getRoot());
-        int returnValue = this.getNodes().size();
-        this.setNodes(new MyArrayList<>());
-        return returnValue;
+
+    public void incSize() {
+        size++;
     }
 
-    public BinarySearchTree<K, V> makeTree(MyArrayList<Pair<K, V>> treeNodes) {
+    public void decSize() {
+        size--;
+    }
+
+    public static <K extends Comparable<K>,V>BinarySearchTree<K, V> makeTree(MyArrayList<Pair<K, V>> treeNodes) {
         BinarySearchTree<K, V> newTree = new BinarySearchTree<>();
         for (int i = 0; i < treeNodes.size(); i++) {
             Pair<K, V> currentPair = treeNodes.get(i);
@@ -98,12 +110,139 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
                 }
             }
             else {
+                // node with that key already exists
                 returnValue = false;
                 break;
             }
         }
         return returnValue;
     }
+
+    public static BinarySearchTree<String, Customer> add(Customer customer, BinarySearchTree<String, Customer> customerBST) {
+        ListElement<Pair<String, Customer>> temp = customerBST.getRoot();
+        ListElement<Pair<String, Customer>> newNode = new ListElement<Pair<String, Customer>>(new Pair<String, Customer>(customer.getLastName(), customer));
+        if (temp == null) {
+            System.out.println("tried to set root");
+            customerBST.setRoot(newNode);
+            customerBST.incSize();
+            return customerBST;
+        }
+        while (temp != null) {
+            String tempKey = temp.getValue().getKey();
+            String lastName = customer.getLastName();
+            System.out.println("beginning! " + customer.getFirstName());
+            if (lastName.compareTo(tempKey) < 0) {
+                if (temp.getPrevious() == null) {
+                    temp.setPrevious(newNode);
+                    customerBST.incSize();
+                    break;
+                }
+                else {
+                    temp = temp.getPrevious();
+                }
+            }
+            else if (lastName.compareTo(tempKey) > 0) {
+                if (temp.getNext() == null) {
+                    temp.setNext(newNode);
+                    customerBST.decSize();
+                    break;
+                }
+                else {
+                    temp = temp.getNext();
+                }
+            }
+            else {
+                System.out.println("moving to first name");
+                tempKey = temp.getValue().getValue().getFirstName();
+                String firstName = customer.getFirstName();
+                if (firstName.compareTo(tempKey) < 0) {
+                    if (temp.getPrevious() == null) {
+                        temp.setPrevious(newNode);
+                        customerBST.incSize();
+                        break;
+                    }
+                    else {
+                        temp = temp.getPrevious();
+                    }
+                }
+                else if (firstName.compareTo(tempKey) > 0) {
+                    if (temp.getNext() == null) {
+                        temp.setNext(newNode);
+                        customerBST.decSize();
+                        break;
+                    }
+                    else {
+                        temp = temp.getNext();
+                    }
+                }
+                else {
+                    System.out.println("moving to ID");
+                    Long tempID = temp.getValue().getValue().getID();
+                    Long ID = customer.getID();
+                    if (ID.compareTo(tempID) < 0) {
+                        if (temp.getPrevious() == null) {
+                            temp.setPrevious(newNode);
+                            customerBST.incSize();
+                            break;
+                        }
+                        else {
+                            temp = temp.getPrevious();
+                        }
+                    }
+                    else if (ID.compareTo(tempID) > 0) {
+                        if (temp.getNext() == null) {
+                            temp.setNext(newNode);
+                            customerBST.decSize();
+                            break;
+                        }
+                        else {
+                            temp = temp.getNext();
+                        }
+                    }
+                }
+            }
+        }
+        if (temp != null) {
+            if (temp.getNext() != null) {
+                System.out.println("added: " + temp.getNext().getValue().getValue().getFirstName());
+            }
+            else {
+                System.out.println("added: " + temp.getPrevious().getValue().getValue().getFirstName());
+            }
+        }
+        return customerBST;
+    }
+
+    /*public static void inOrderSearch(ListElement<Pair<Long, Customer>> node, BinarySearchTree<Long, Customer> customerTree, BinarySearchTree<String, Customer> newTree, String term) {
+        if (node != null) {
+            inOrderSearch(node.getPrevious(), customerTree, newTree, term);
+            String checkValue = (node.getValue().getValue().getFirstName() + " " + node.getValue().getValue().getLastName()).toLowerCase();
+            String checkTerm = term.toLowerCase();
+            if (checkValue.contains(checkTerm)) {
+                System.out.println("yay " + checkValue + " " + term);
+                add(node.getValue().getValue(), newTree);
+            }
+            inOrderSearch(node.getNext(), customerTree, newTree, term);
+        }
+    }*/
+
+    public static MyArrayList<Customer> inOrderSearch(ListElement<Pair<Long, Customer>> node, MyArrayList<Customer> arrayList, String searchTerm) {
+        MyArrayList<Customer> leftArrayList = new MyArrayList<>();
+        MyArrayList<Customer> currentNode = new MyArrayList<>();
+        MyArrayList<Customer> rightArrayList = new MyArrayList<>();
+        if (node != null) {
+            String checkValue = (node.getValue().getValue().getFirstName() + " " + node.getValue().getValue().getLastName()).toLowerCase();
+            String checkTerm = searchTerm.toLowerCase();
+            leftArrayList = inOrderSearch(node.getPrevious(), arrayList, searchTerm);
+            if (checkValue.contains(checkTerm)) {
+                currentNode.add(node.getValue().getValue());
+            }
+            rightArrayList = inOrderSearch(node.getNext(), arrayList, searchTerm);
+        }
+        MyArrayList<Customer> returnArrayList = MyArrayList.concat(MyArrayList.concat(leftArrayList, currentNode), rightArrayList); 
+        return returnArrayList;
+    }
+    
 
     public V get(K key) {
         ListElement<Pair<K, V>> temp = root;
@@ -122,37 +261,40 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
         return null;
     }
 
-    public void inOrder(ListElement<Pair<K, V>> node) {
+    public static <K extends Comparable<K>, V> MyArrayList<Pair<K, V>> inOrder(ListElement<Pair<K, V>> node, MyArrayList<Pair<K, V>> arrayList) {
+        MyArrayList<Pair<K, V>> leftArrayList = new MyArrayList<>();
+        MyArrayList<Pair<K, V>> currentNode = new MyArrayList<>();
+        MyArrayList<Pair<K, V>> rightArrayList = new MyArrayList<>();
         if (node != null) {
-            inOrder(node.getNext());
-            System.out.println(node.getValue().getValue());
-            nodes.add(node.getValue());
-            inOrder(node.getPrevious());
+            leftArrayList = inOrder(node.getPrevious(), arrayList);
+            currentNode.add(node.getValue());
+            rightArrayList = inOrder(node.getNext(), arrayList);
         }
-        if (node == root) {
-            //this.setNodes(new MyArrayList<>());
-        }
+        MyArrayList<Pair<K, V>> returnArrayList = MyArrayList.concat(MyArrayList.concat(leftArrayList, currentNode), rightArrayList); 
+        return returnArrayList;
     }
 
-    private void inOrder(ListElement<Pair<K, V>> node, K excludeKey) {
+    private MyArrayList<Pair<K, V>> inOrder(ListElement<Pair<K, V>> node, MyArrayList<Pair<K, V>> arrayList, K excludeKey) {
+        MyArrayList<Pair<K, V>> leftArrayList = new MyArrayList<>();
+        MyArrayList<Pair<K, V>> currentNode = new MyArrayList<>();
+        MyArrayList<Pair<K, V>> rightArrayList = new MyArrayList<>();
         if (node != null) {
-            inOrder(node.getNext(), excludeKey);
+            leftArrayList = inOrder(node.getPrevious(), arrayList, excludeKey);
             if (node.getValue().getKey().equals(excludeKey) == false) {
-                nodes.add(node.getValue());
+                currentNode.add(node.getValue());
             }
             else {
-                size--;
+                size--; 
             }
-            inOrder(node.getPrevious(), excludeKey);
+            rightArrayList = inOrder(node.getNext(), arrayList, excludeKey);
         }
+        MyArrayList<Pair<K, V>> returnArrayList = MyArrayList.concat(MyArrayList.concat(leftArrayList, currentNode), rightArrayList); 
+        return returnArrayList;
     }
 
     public void remove(K key) {
-        this.setNodes(new MyArrayList<>());
         if (this.get(key) != null) {
-            this.inOrder(root, key);
-            root = this.makeTree(this.getNodes()).getRoot();
+            root = makeTree(inOrder(this.getRoot(), new MyArrayList<>(), key)).getRoot();
         }
-        this.setNodes(new MyArrayList<>());
     }
 }

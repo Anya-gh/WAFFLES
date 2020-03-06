@@ -13,9 +13,11 @@ import org.apache.commons.io.IOUtils;
 import uk.ac.warwick.cs126.structures.MyArrayList;
 import uk.ac.warwick.cs126.structures.BinarySearchTree;
 import uk.ac.warwick.cs126.structures.HashMap;
+import uk.ac.warwick.cs126.structures.Pair;
 
 import uk.ac.warwick.cs126.util.DataChecker;
 import uk.ac.warwick.cs126.util.StringFormatter;
+import uk.ac.warwick.cs126.util.Sorter;
 
 public class CustomerStore implements ICustomerStore {
 
@@ -119,33 +121,49 @@ public class CustomerStore implements ICustomerStore {
 
     public Customer[] getCustomers() {
         Customer[] sortedArray = new Customer[customers.getSize()];
-        customers.inOrder(customers.getRoot());
-        for (int i = 1; i <= customers.getSize(); i++) {
-            sortedArray[customers.getSize() - i] = customers.getNodes().get(i - 1).getValue();
+        MyArrayList<Pair<Long, Customer>> arrayList = BinarySearchTree.inOrder(customers.getRoot(), new MyArrayList<>());
+        for (int i = 0; i < arrayList.size(); i++) {
+            sortedArray[i] = arrayList.get(i).getValue();
         }
         return sortedArray;
     }
 
     public Customer[] getCustomers(Customer[] customers) {
-        // TODO
-        return new Customer[0];
+        return Sorter.quickSortCustomersID(customers);
     }
 
     public Customer[] getCustomersByName() {
-        // TODO
-        return new Customer[0];
+        Customer[] sortedArray = new Customer[customers.getSize()];
+        MyArrayList<Pair<Long, Customer>> arrayList = BinarySearchTree.inOrder(customers.getRoot(), new MyArrayList<>());
+        for (int i = 0; i < arrayList.size(); i++) {
+            sortedArray[i] = arrayList.get(i).getValue();
+        }
+        return Sorter.quickSortCustomersName(sortedArray);
     }
 
     public Customer[] getCustomersByName(Customer[] customers) {
-        // TODO
-        return new Customer[0];
+        return Sorter.quickSortCustomersName(customers);
     }
 
     public Customer[] getCustomersContaining(String searchTerm) {
         // TODO
         // String searchTermConverted = stringFormatter.convertAccents(searchTerm);
-        // String searchTermConvertedFaster = stringFormatter.convertAccentsFaster(searchTerm);
-        return new Customer[0];
+        String searchTermConvertedFaster = StringFormatter.convertAccentsFaster(searchTerm);
+        MyArrayList<Customer> matchedCustomersList = BinarySearchTree.inOrderSearch(customers.getRoot(), new MyArrayList<>(), searchTermConvertedFaster);
+        MyArrayList<Customer> sortedCustomersList = Sorter.quickSortCustomersName(matchedCustomersList);
+        Customer[] sortedArray = new Customer[sortedCustomersList.size()];
+        for (int i = 0; i < sortedCustomersList.size(); i++) {
+            sortedArray[i] = sortedCustomersList.get(i);
+        }
+        return sortedArray;
+        /*BinarySearchTree<String, Customer> byNameTree = new BinarySearchTree<>();
+        BinarySearchTree.inOrderSearch(customers.getRoot(), customers, byNameTree, searchTermConvertedFaster);
+        System.out.println(byNameTree.getSize());
+        MyArrayList<Pair<String, Customer>> arrayList = BinarySearchTree.inOrder(byNameTree.getRoot(), new MyArrayList<>());
+        for (int i = 0; i < arrayList.size(); i++) {
+            sortedArray[i] = arrayList.get(i).getValue();
+        }
+        return sortedArray;*/
     }
 
 }
