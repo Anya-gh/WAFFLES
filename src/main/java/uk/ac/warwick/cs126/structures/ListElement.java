@@ -2,11 +2,13 @@ package uk.ac.warwick.cs126.structures;
 
 public class ListElement<E> {
   private E value;
+  private boolean active;
   private ListElement<E> previous;
   private ListElement<E> next;
 
   public ListElement(E _value) {
     this.value = _value;
+    this.active = true;
   }
 
   public E getValue() {
@@ -31,5 +33,13 @@ public class ListElement<E> {
 
   public ListElement<E> getPrevious() {
     return this.previous;
+  }
+
+  public void setActive(boolean value) {
+    this.active = value;
+  }
+
+  public boolean isActive() {
+    return this.active;
   }
 }

@@ -182,7 +182,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
             String checkValue = (node.getValue().getValue().getFirstName() + " " + node.getValue().getValue().getLastName()).toLowerCase();
             String checkTerm = searchTerm.toLowerCase();
             leftArrayList = inOrderSearch(node.getPrevious(), arrayList, searchTerm);
-            if (checkValue.contains(checkTerm)) {
+            if ((checkValue.contains(checkTerm)) && (node.isActive())) {
                 currentNode.add(node.getValue().getValue());
             }
             rightArrayList = inOrderSearch(node.getNext(), arrayList, searchTerm);
@@ -198,7 +198,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
             // left tree
             inOrderSearch(node.getPrevious(), tree, searchTerm);
             // current
-            if (checkValue.contains(checkTerm)) {
+            if ((checkValue.contains(checkTerm)) && (node.isActive())) {
                 Customer customer = node.getValue().getValue();
                 tree.add(customer.getLastName(), customer);
             }
@@ -210,8 +210,10 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
     public static <K extends Comparable<K>> int inOrder(ListElement<Pair<K, Customer>> node, Customer[] array, int index) {
         if (node != null) {
             index = inOrder(node.getPrevious(), array, index);
-            array[index] = node.getValue().getValue();
-            index++;
+            if (node.isActive()) {
+                array[index] = node.getValue().getValue();
+                index++;
+            }
             index = inOrder(node.getNext(), array, index);
         }
         return index;
@@ -266,8 +268,21 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
     }
 
     public void remove(K key) {
-        if (this.get(key) != null) {
+        /*if (this.get(key) != null) {
             root = makeTree(inOrder(this.getRoot(), new MyArrayList<>(), key)).getRoot();
+        }*/
+        ListElement<Pair<K, V>> temp = root;
+        while (temp != null) {
+            K tempKey = temp.getValue().getKey();
+            if (key.compareTo(tempKey) < 0) {
+                temp = temp.getPrevious();
+            }
+            else if (key.compareTo(tempKey) > 0) {
+                temp = temp.getNext();
+            }
+            else {
+                temp.setActive(false);
+            }
         }
     }
 }
