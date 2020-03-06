@@ -32,22 +32,18 @@ public class PairLinkedList<K, V> {
         }
     }
 
-    public V get(K key) {
+    public Pair<K, V> get(K key) {
         ListElement<Pair<K, V>> temp = head;
+        Pair<K, V> nullPair = new Pair<K, V>(key, null);
         if (temp != null) {
-            V returnValue = temp.getValue().getValue();
             while (temp != null) {
                 Pair<K, V> currentPair = temp.getValue();
                 if (currentPair.getKey().equals(key)) {
-                    returnValue = currentPair.getValue();
-                    break;
+                    return currentPair;
                 }
                 temp = temp.getNext();
             }
-            return returnValue;
         }
-        else {
-            return null;
-        }
+        return nullPair;
     }    
 }

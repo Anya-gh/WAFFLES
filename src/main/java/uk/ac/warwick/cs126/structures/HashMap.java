@@ -30,7 +30,7 @@ public class HashMap<K, V> {
       int hashCode = this.getIndex(key);
       PairLinkedList<K, V> temp = hashArray[hashCode];
       if (temp != null) {
-        return temp.get(key);
+        return temp.get(key).getValue();
       }
       else {
         return null;

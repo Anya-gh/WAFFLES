@@ -2,6 +2,8 @@ package uk.ac.warwick.cs126.structures;
 
 import uk.ac.warwick.cs126.models.Customer;
 
+import uk.ac.warwick.cs126.util.StringFormatter;
+
 public class BinarySearchTree<K extends Comparable<K>, V> {
     private ListElement<Pair<K, V>> root;
     private int size;
@@ -193,7 +195,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
 
     public static void inOrderSearch(ListElement<Pair<Long, Customer>> node, BinarySearchTree<String, Customer> tree, String searchTerm) {
         if (node != null) {
-            String checkValue = (node.getValue().getValue().getFirstName() + " " + node.getValue().getValue().getLastName()).toLowerCase();
+            String checkValue = StringFormatter.convertAccentsFaster(node.getValue().getValue().getFirstName() + " " + node.getValue().getValue().getLastName()).toLowerCase();
             String checkTerm = searchTerm.toLowerCase();
             // left tree
             inOrderSearch(node.getPrevious(), tree, searchTerm);
