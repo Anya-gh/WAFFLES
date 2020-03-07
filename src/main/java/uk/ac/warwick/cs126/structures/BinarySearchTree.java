@@ -4,6 +4,8 @@ import uk.ac.warwick.cs126.models.Customer;
 import uk.ac.warwick.cs126.models.Favourite;
 import uk.ac.warwick.cs126.util.StringFormatter;
 
+import uk.ac.warwick.cs126.util.StringFormatter;
+
 public class BinarySearchTree<K extends Comparable<K>, V> {
     private ListElement<Pair<K, V>> root;
     private int size;
