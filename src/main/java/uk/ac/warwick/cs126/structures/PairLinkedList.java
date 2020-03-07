@@ -1,5 +1,8 @@
 package uk.ac.warwick.cs126.structures;
 
+import uk.ac.warwick.cs126.models.Favourite;
+import java.util.Date;
+
 public class PairLinkedList<K, V> {
     private ListElement<Pair<K, V>> head;
 
@@ -7,8 +10,8 @@ public class PairLinkedList<K, V> {
         this.head = new ListElement<>(head);
     }
 
-    public Pair<K, V> getHead() {
-        return head.getValue();
+    public ListElement<Pair<K, V>> getHead() {
+        return head;
     }
 
     public static void main (String[] args) {
@@ -22,6 +25,10 @@ public class PairLinkedList<K, V> {
         ListElement<Pair<K, V>> temp = head;
         ListElement<Pair<K, V>> newPair = new ListElement<>(pair);
         while (temp != null) {
+            if (temp.equals(newPair)) {
+                temp.setActive(false);
+                break;
+            }
             if (temp.getNext() == null) {
                 temp.setNext(newPair);
                 break;
@@ -32,22 +39,18 @@ public class PairLinkedList<K, V> {
         }
     }
 
-    public V get(K key) {
+    public Pair<K, V> get(K key) {
         ListElement<Pair<K, V>> temp = head;
+        Pair<K, V> nullPair = new Pair<K, V>(key, null);
         if (temp != null) {
-            V returnValue = temp.getValue().getValue();
             while (temp != null) {
                 Pair<K, V> currentPair = temp.getValue();
                 if (currentPair.getKey().equals(key)) {
-                    returnValue = currentPair.getValue();
-                    break;
+                    return currentPair;
                 }
                 temp = temp.getNext();
             }
-            return returnValue;
         }
-        else {
-            return null;
-        }
+        return nullPair;
     }    
 }

@@ -1,6 +1,8 @@
 package uk.ac.warwick.cs126.structures;
 
 import uk.ac.warwick.cs126.models.Customer;
+import uk.ac.warwick.cs126.models.Favourite;
+import uk.ac.warwick.cs126.util.StringFormatter;
 
 public class BinarySearchTree<K extends Comparable<K>, V> {
     private ListElement<Pair<K, V>> root;
@@ -193,7 +195,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
 
     public static void inOrderSearch(ListElement<Pair<Long, Customer>> node, BinarySearchTree<String, Customer> tree, String searchTerm) {
         if (node != null) {
-            String checkValue = (node.getValue().getValue().getFirstName() + " " + node.getValue().getValue().getLastName()).toLowerCase();
+            String checkValue = StringFormatter.convertAccentsFaster(node.getValue().getValue().getFirstName() + " " + node.getValue().getValue().getLastName()).toLowerCase();
             String checkTerm = searchTerm.toLowerCase();
             // left tree
             inOrderSearch(node.getPrevious(), tree, searchTerm);
@@ -208,6 +210,18 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
     }
 
     public static <K extends Comparable<K>> int inOrder(ListElement<Pair<K, Customer>> node, Customer[] array, int index) {
+        if (node != null) {
+            index = inOrder(node.getPrevious(), array, index);
+            if (node.isActive()) {
+                array[index] = node.getValue().getValue();
+                index++;
+            }
+            index = inOrder(node.getNext(), array, index);
+        }
+        return index;
+    }
+
+    public static <K extends Comparable<K>> int inOrder(ListElement<Pair<K, Favourite>> node, Favourite[] array, int index) {
         if (node != null) {
             index = inOrder(node.getPrevious(), array, index);
             if (node.isActive()) {
@@ -283,6 +297,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
             else {
                 temp.setActive(false);
                 size--;
+                break;
             }
         }
     }

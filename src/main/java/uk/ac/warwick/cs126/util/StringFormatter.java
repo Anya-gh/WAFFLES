@@ -1504,7 +1504,12 @@ public class StringFormatter {
         String replacedString = "";
         for (int i = 0; i < str.length(); i++) {
             String convertedAccent = accentHashMap.get(str.charAt(i) + "");
-            replacedString += convertedAccent;
+            if (convertedAccent == null) {
+                replacedString += str.charAt(i);
+            }
+            else {
+                replacedString += convertedAccent;
+            }
         }
 
         return replacedString;

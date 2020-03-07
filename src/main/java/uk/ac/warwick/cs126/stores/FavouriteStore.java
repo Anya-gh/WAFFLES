@@ -11,18 +11,26 @@ import java.text.SimpleDateFormat;
 import org.apache.commons.io.IOUtils;
 
 import uk.ac.warwick.cs126.structures.MyArrayList;
-
 import uk.ac.warwick.cs126.util.DataChecker;
+import uk.ac.warwick.cs126.structures.BinarySearchTree;
+import uk.ac.warwick.cs126.structures.HashMap;
+import uk.ac.warwick.cs126.structures.Pair;
 
 public class FavouriteStore implements IFavouriteStore {
 
     private MyArrayList<Favourite> favouriteArray;
     private DataChecker dataChecker;
+    private BinarySearchTree<Long, Favourite> favourites;
+    private HashMap<Long, Favourite> blacklistedIDs;
+    private HashMap<Long, Pair<Long[], Favourite>> allFavourites;
 
     public FavouriteStore() {
         // Initialise variables here
         favouriteArray = new MyArrayList<>();
         dataChecker = new DataChecker();
+        favourites = new BinarySearchTree<>();
+        blacklistedIDs = new HashMap<>();
+        allFavourites = new HashMap<>();
     }
 
     public Favourite[] loadFavouriteDataToArray(InputStream resource) {
@@ -75,23 +83,48 @@ public class FavouriteStore implements IFavouriteStore {
     }
 
     public boolean addFavourite(Favourite favourite) {
-        // TODO
+        if (dataChecker.isValid(favourite)) {
+            Long[] idArray = {favourite.getRestaurantID(), favourite.getCustomerID()};
+            Pair<Long[], Favourite> idPair = new Pair<>(idArray, favourite);
+            allFavourites.add(favourite.getRestaurantID() + favourite.getCustomerID(), idPair);
+            if (blacklistedIDs.get(favourite.getID()) == null) {
+                if (favourites.add(favourite.getID(), favourite) == false) {
+                    blacklistedIDs.add(favourite.getID(), favourite);
+                    favourites.remove(favourite.getID());
+                    allFavourites.remove(favourite.getRestaurantID() + favourite.getCustomerID(), idPair);
+                    return false;
+                }
+                else {
+                    Favourite oldestFavourite = allFavourites.getOldestFavourite(favourite.getRestaurantID() + favourite.getCustomerID(), idArray);
+                    if (favourite.equals(oldestFavourite) == false) {
+                        favourites.remove(favourite.getID());
+                    }
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }
+        }
         return false;
     }
 
     public boolean addFavourite(Favourite[] favourites) {
-        // TODO
-        return false;
+        boolean returnValue = true;
+        for (int i = 0; i < favourites.length; i++) {
+            returnValue = addFavourite(favourites[i]);
+        }
+        return returnValue;
     }
 
     public Favourite getFavourite(Long id) {
-        // TODO
-        return null;
+        return favourites.get(id);
     }
 
     public Favourite[] getFavourites() {
-        // TODO
-        return new Favourite[0];
+        Favourite[] sortedArray = new Favourite[favourites.getSize()];
+        BinarySearchTree.inOrder(favourites.getRoot(), sortedArray, 0);
+        return sortedArray;
     }
 
     public Favourite[] getFavouritesByCustomerID(Long id) {
