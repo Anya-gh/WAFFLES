@@ -212,13 +212,13 @@ public class Sorter {
                         if (StoreCompare.compareID(restaurants.get(i), restaurants.get(pointer)) > 0) {
                             right.add(restaurants.get(i));
                         }
-                        else if (StoreCompare.compareName(restaurants.get(i), restaurants.get(pointer)) < 0) {
+                        else if (StoreCompare.compareID(restaurants.get(i), restaurants.get(pointer)) < 0) {
                             left.add(restaurants.get(i));
                         }
                     }
                 }
             }
-            return MyArrayList.concat(MyArrayList.concat(quickSortRestaurantsName(left), current), quickSortRestaurantsName(right));
+            return MyArrayList.concat(MyArrayList.concat(quickSortRestaurantsDate(left), current), quickSortRestaurantsDate(right));
         }
         else {
             return restaurants;
