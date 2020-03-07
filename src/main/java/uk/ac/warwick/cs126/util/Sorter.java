@@ -1,5 +1,6 @@
 package uk.ac.warwick.cs126.util;
 import uk.ac.warwick.cs126.models.Customer;
+import uk.ac.warwick.cs126.models.Restaurant;
 import uk.ac.warwick.cs126.structures.MyArrayList;
 
 public class Sorter {
@@ -28,10 +29,10 @@ public class Sorter {
         current.add(customers.get(pointer));
         if (customers.size() > 1) {
             for (int i = 0; i < customers.size(); i++) {
-                if (CustomerCompare.compareID(customers.get(i), customers.get(pointer)) > 0) {
+                if (StoreCompare.compareID(customers.get(i), customers.get(pointer)) > 0) {
                     right.add(customers.get(i));
                 }
-                else if (CustomerCompare.compareID(customers.get(i), customers.get(pointer)) < 0) {
+                else if (StoreCompare.compareID(customers.get(i), customers.get(pointer)) < 0) {
                     left.add(customers.get(i));
                 }
             }
@@ -39,6 +40,42 @@ public class Sorter {
         }
         else {
             return customers;
+        }
+        
+    }
+
+    public static Restaurant[] quickSortRestaurantsID(Restaurant[] restaurants) {
+        MyArrayList<Restaurant> restaurantArrayList = new MyArrayList<>();
+        for (int i = 0; i < restaurants.length; i++) {
+            restaurantArrayList.add(restaurants[i]);
+        }
+        restaurantArrayList = quickSortRestaurantsID(restaurantArrayList);
+        Restaurant[] sortedArray = new Restaurant[restaurantArrayList.size()];
+        for (int i = 0; i < restaurantArrayList.size(); i++) {
+            sortedArray[i] = restaurantArrayList.get(i);
+        }
+        return sortedArray;
+    }
+
+    private static MyArrayList<Restaurant> quickSortRestaurantsID(MyArrayList<Restaurant> restaurants) {
+        MyArrayList<Restaurant> left = new MyArrayList<>();
+        MyArrayList<Restaurant> right = new MyArrayList<>();
+        MyArrayList<Restaurant> current = new MyArrayList<>();
+        int pointer = restaurants.size() / 2;
+        current.add(restaurants.get(pointer));
+        if (restaurants.size() > 1) {
+            for (int i = 0; i < restaurants.size(); i++) {
+                if (StoreCompare.compareID(restaurants.get(i), restaurants.get(pointer)) > 0) {
+                    right.add(restaurants.get(i));
+                }
+                else if (StoreCompare.compareID(restaurants.get(i), restaurants.get(pointer)) < 0) {
+                    left.add(restaurants.get(i));
+                }
+            }
+            return MyArrayList.concat(MyArrayList.concat(quickSortRestaurantsID(left), current), quickSortRestaurantsID(right));
+        }
+        else {
+            return restaurants;
         }
         
     }
@@ -64,24 +101,24 @@ public class Sorter {
         current.add(customers.get(pointer));
         if (customers.size() > 1) {
             for (int i = 0; i < customers.size(); i++) {
-                if (CustomerCompare.compareLastName(customers.get(i), customers.get(pointer)) > 0) {
+                if (StoreCompare.compareLastName(customers.get(i), customers.get(pointer)) > 0) {
                     right.add(customers.get(i));
                 }
-                else if (CustomerCompare.compareLastName(customers.get(i), customers.get(pointer)) < 0) {
+                else if (StoreCompare.compareLastName(customers.get(i), customers.get(pointer)) < 0) {
                     left.add(customers.get(i));
                 }
                 else {
-                    if (CustomerCompare.compareFirstName(customers.get(i), customers.get(pointer)) > 0) {
+                    if (StoreCompare.compareFirstName(customers.get(i), customers.get(pointer)) > 0) {
                         right.add(customers.get(i));
                     }
-                    else if (CustomerCompare.compareFirstName(customers.get(i), customers.get(pointer)) < 0) {
+                    else if (StoreCompare.compareFirstName(customers.get(i), customers.get(pointer)) < 0) {
                         left.add(customers.get(i));
                     }
                     else {
-                        if (CustomerCompare.compareID(customers.get(i), customers.get(pointer)) > 0) {
+                        if (StoreCompare.compareID(customers.get(i), customers.get(pointer)) > 0) {
                             right.add(customers.get(i));
                         }
-                        else if (CustomerCompare.compareID(customers.get(i), customers.get(pointer)) < 0) {
+                        else if (StoreCompare.compareID(customers.get(i), customers.get(pointer)) < 0) {
                             left.add(customers.get(i));
                         }
                     }
@@ -92,6 +129,48 @@ public class Sorter {
         else {
             return customers;
         }
-        
+    }
+
+    public static Restaurant[] quickSortRestaurantsName(Restaurant[] restaurants) {
+        MyArrayList<Restaurant> restaurantArrayList = new MyArrayList<>();
+        for (int i = 0; i < restaurants.length; i++) {
+            restaurantArrayList.add(restaurants[i]);
+        }
+        restaurantArrayList = quickSortRestaurantsName(restaurantArrayList);
+        Restaurant[] sortedArray = new Restaurant[restaurantArrayList.size()];
+        for (int i = 0; i < restaurantArrayList.size(); i++) {
+            sortedArray[i] = restaurantArrayList.get(i);
+        }
+        return sortedArray;
+    }
+
+    public static MyArrayList<Restaurant> quickSortRestaurantsName(MyArrayList<Restaurant> restaurants) {
+        MyArrayList<Restaurant> left = new MyArrayList<>();
+        MyArrayList<Restaurant> right = new MyArrayList<>();
+        MyArrayList<Restaurant> current = new MyArrayList<>();
+        int pointer = restaurants.size() / 2;
+        current.add(restaurants.get(pointer));
+        if (restaurants.size() > 1) {
+            for (int i = 0; i < restaurants.size(); i++) {
+                if (StoreCompare.compareName(restaurants.get(i), restaurants.get(pointer)) > 0) {
+                    right.add(restaurants.get(i));
+                }
+                else if (StoreCompare.compareName(restaurants.get(i), restaurants.get(pointer)) < 0) {
+                    left.add(restaurants.get(i));
+                }
+                else {
+                    if (StoreCompare.compareID(restaurants.get(i), restaurants.get(pointer)) > 0) {
+                        right.add(restaurants.get(i));
+                    }
+                    else if (StoreCompare.compareID(restaurants.get(i), restaurants.get(pointer)) < 0) {
+                        left.add(restaurants.get(i));
+                    }
+                }
+            }
+            return MyArrayList.concat(MyArrayList.concat(quickSortRestaurantsName(left), current), quickSortRestaurantsName(right));
+        }
+        else {
+            return restaurants;
+        }
     }
 }

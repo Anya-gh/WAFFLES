@@ -23,6 +23,7 @@ import uk.ac.warwick.cs126.util.ConvertToPlace;
 import uk.ac.warwick.cs126.util.HaversineDistanceCalculator;
 import uk.ac.warwick.cs126.util.DataChecker;
 import uk.ac.warwick.cs126.util.StringFormatter;
+import uk.ac.warwick.cs126.util.Sorter;
 
 public class RestaurantStore implements IRestaurantStore {
 
@@ -143,13 +144,13 @@ public class RestaurantStore implements IRestaurantStore {
     }
 
     public Restaurant[] getRestaurants(Restaurant[] restaurants) {
-        // TODO
-        return new Restaurant[0];
+        return Sorter.quickSortRestaurantsID(restaurants);
     }
 
     public Restaurant[] getRestaurantsByName() {
-        // TODO
-        return new Restaurant[0];
+        Restaurant[] sortedArray = new Restaurant[restaurants.getSize()];
+        BinarySearchTree.inOrder(restaurants.getRoot(), sortedArray, 0);
+        return Sorter.quickSortRestaurantsName(sortedArray);
     }
 
     public Restaurant[] getRestaurantsByDateEstablished() {
