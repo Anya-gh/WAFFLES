@@ -160,8 +160,7 @@ public class RestaurantStore implements IRestaurantStore {
     }
 
     public Restaurant[] getRestaurantsByDateEstablished(Restaurant[] restaurants) {
-        // TODO
-        return new Restaurant[0];
+        return Sorter.quickSortRestaurantsDate(restaurants);
     }
 
     public Restaurant[] getRestaurantsByWarwickStars() {
