@@ -84,21 +84,21 @@ public class FavouriteStore implements IFavouriteStore {
 
     public boolean addFavourite(Favourite favourite) {
         if (dataChecker.isValid(favourite)) {
-            Long[] idArray = {favourite.getRestaurantID(), favourite.getCustomerID()};
-            Pair<Long[], Favourite> idPair = new Pair<>(idArray, favourite);
-            allFavourites.add(favourite.getRestaurantID() + favourite.getCustomerID(), idPair);
             if (blacklistedIDs.get(favourite.getID()) == null) {
+                /*Long[] idArray = {favourite.getRestaurantID(), favourite.getCustomerID()};
+                Pair<Long[], Favourite> idPair = new Pair<>(idArray, favourite);
+                allFavourites.add(favourite.getRestaurantID() + favourite.getCustomerID(), idPair);*/
                 if (favourites.add(favourite.getID(), favourite) == false) {
                     blacklistedIDs.add(favourite.getID(), favourite);
                     favourites.remove(favourite.getID());
-                    allFavourites.remove(favourite.getRestaurantID() + favourite.getCustomerID(), idPair);
+                    //allFavourites.remove(favourite.getRestaurantID() + favourite.getCustomerID(), idPair);
                     return false;
                 }
                 else {
-                    Favourite oldestFavourite = allFavourites.getOldestFavourite(favourite.getRestaurantID() + favourite.getCustomerID(), idArray);
+                    /*Favourite oldestFavourite = allFavourites.getOldestFavourite(favourite.getRestaurantID() + favourite.getCustomerID(), idArray);
                     if (favourite.equals(oldestFavourite) == false) {
                         favourites.remove(favourite.getID());
-                    }
+                    }*/
                     return true;
                 }
             }

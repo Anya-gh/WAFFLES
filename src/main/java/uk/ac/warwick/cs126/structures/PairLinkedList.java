@@ -25,9 +25,15 @@ public class PairLinkedList<K, V> {
         ListElement<Pair<K, V>> temp = head;
         ListElement<Pair<K, V>> newPair = new ListElement<>(pair);
         while (temp != null) {
-            if (temp.equals(newPair)) {
-                temp.setActive(false);
-                break;
+            if (temp.getValue().getKey() instanceof Long[]) {
+                Favourite tempFavourite = (Favourite) temp.getValue().getValue();
+                Long tempFavouriteID = tempFavourite.getID();
+                Favourite newFavourite = (Favourite) newPair.getValue().getValue();
+                Long newFavouriteID = newFavourite.getID();
+                if (tempFavouriteID.equals(newFavouriteID)) {
+                    temp.setActive(false);
+                    break;
+                }
             }
             if (temp.getNext() == null) {
                 temp.setNext(newPair);

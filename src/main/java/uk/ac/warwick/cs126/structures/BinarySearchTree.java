@@ -2,6 +2,7 @@ package uk.ac.warwick.cs126.structures;
 
 import uk.ac.warwick.cs126.models.Customer;
 import uk.ac.warwick.cs126.models.Favourite;
+import uk.ac.warwick.cs126.models.Restaurant;
 import uk.ac.warwick.cs126.util.StringFormatter;
 
 import uk.ac.warwick.cs126.util.StringFormatter;
@@ -212,6 +213,18 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
     }
 
     public static <K extends Comparable<K>> int inOrder(ListElement<Pair<K, Customer>> node, Customer[] array, int index) {
+        if (node != null) {
+            index = inOrder(node.getPrevious(), array, index);
+            if (node.isActive()) {
+                array[index] = node.getValue().getValue();
+                index++;
+            }
+            index = inOrder(node.getNext(), array, index);
+        }
+        return index;
+    }
+
+    public static <K extends Comparable<K>> int inOrder(ListElement<Pair<K, Restaurant>> node, Restaurant[] array, int index) {
         if (node != null) {
             index = inOrder(node.getPrevious(), array, index);
             if (node.isActive()) {

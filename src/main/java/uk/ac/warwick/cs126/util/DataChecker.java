@@ -101,7 +101,7 @@ public class DataChecker implements IDataChecker {
         }
         else {
           if (this.extractTrueID(restaurant.getRepeatedID()) == null) {
-            System.out.println(this.extractTrueID(restaurant.getRepeatedID()));
+            //System.out.println(this.extractTrueID(restaurant.getRepeatedID()));
             returnValue = false;
           }
           else {

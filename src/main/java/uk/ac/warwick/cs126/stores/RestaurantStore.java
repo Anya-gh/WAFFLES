@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import org.apache.commons.io.IOUtils;
 
 import uk.ac.warwick.cs126.structures.MyArrayList;
+import uk.ac.warwick.cs126.structures.BinarySearchTree;
+import uk.ac.warwick.cs126.structures.HashMap;
 
 import uk.ac.warwick.cs126.util.ConvertToPlace;
 import uk.ac.warwick.cs126.util.HaversineDistanceCalculator;
@@ -26,11 +28,15 @@ public class RestaurantStore implements IRestaurantStore {
 
     private MyArrayList<Restaurant> restaurantArray;
     private DataChecker dataChecker;
+    private BinarySearchTree<Long, Restaurant> restaurants;
+    private HashMap<Long, Restaurant> blacklistedIDs;
 
     public RestaurantStore() {
         // Initialise variables here
         restaurantArray = new MyArrayList<>();
         dataChecker = new DataChecker();
+        restaurants = new BinarySearchTree<>();
+        blacklistedIDs = new HashMap<>();
     }
 
     public Restaurant[] loadRestaurantDataToArray(InputStream resource) {
@@ -100,23 +106,40 @@ public class RestaurantStore implements IRestaurantStore {
     }
 
     public boolean addRestaurant(Restaurant restaurant) {
-        // TODO        
+        if (dataChecker.isValid(restaurant)) {
+            if (blacklistedIDs.get(restaurant.getID()) == null) {
+                if (restaurants.add(restaurant.getID(), restaurant) == false) {
+                    blacklistedIDs.add(restaurant.getID(), restaurant);
+                    restaurants.remove(restaurant.getID());
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }
+        }
         return false;
     }
 
     public boolean addRestaurant(Restaurant[] restaurants) {
-        // TODO
-        return false;
+        boolean returnValue = false;
+        for (int i = 0; i < restaurants.length; i++) {
+            returnValue = addRestaurant(restaurants[i]);
+        }
+        return returnValue;
     }
 
     public Restaurant getRestaurant(Long id) {
-        // TODO
-        return null;
+        return restaurants.get(id);
     }
 
     public Restaurant[] getRestaurants() {
-        // TODO
-        return new Restaurant[0];
+        Restaurant[] sortedArray = new Restaurant[restaurants.getSize()];
+        BinarySearchTree.inOrder(restaurants.getRoot(), sortedArray, 0);
+        return sortedArray;
     }
 
     public Restaurant[] getRestaurants(Restaurant[] restaurants) {
