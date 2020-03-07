@@ -47,8 +47,20 @@ public class StoreCompare {
 
     public static int compareDateEstablished(Restaurant restaurant1, Restaurant restaurant2) {
         Date firstRestaurantDate = restaurant1.getDateEstablished();
-        Date secondRestaurantDate = restaurant1.getDateEstablished();
+        Date secondRestaurantDate = restaurant2.getDateEstablished();
         return firstRestaurantDate.compareTo(secondRestaurantDate);
+    }
+
+    public static int compareStars(Restaurant restaurant1, Restaurant restaurant2) {
+        Integer firstStars = restaurant1.getWarwickStars();
+        Integer secondStars = restaurant2.getWarwickStars();
+        return firstStars.compareTo(secondStars);
+    }
+
+    public static int compareRating(Restaurant restaurant1, Restaurant restaurant2) {
+        Float firstRating = restaurant1.getCustomerRating();
+        Float secondRating = restaurant2.getCustomerRating();
+        return firstRating.compareTo(secondRating);
     }
 
 }
