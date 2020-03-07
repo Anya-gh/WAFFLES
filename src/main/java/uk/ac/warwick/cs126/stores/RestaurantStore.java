@@ -154,8 +154,9 @@ public class RestaurantStore implements IRestaurantStore {
     }
 
     public Restaurant[] getRestaurantsByDateEstablished() {
-        // TODO
-        return new Restaurant[0];
+        Restaurant[] sortedArray = new Restaurant[restaurants.getSize()];
+        BinarySearchTree.inOrder(restaurants.getRoot(), sortedArray, 0);
+        return Sorter.quickSortRestaurantsDate(sortedArray);
     }
 
     public Restaurant[] getRestaurantsByDateEstablished(Restaurant[] restaurants) {

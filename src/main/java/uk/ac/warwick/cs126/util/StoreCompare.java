@@ -45,4 +45,10 @@ public class StoreCompare {
         return firstCustomerDate.compareTo(secondCustomerDate);
     }
 
+    public static int compareDateEstablished(Restaurant restaurant1, Restaurant restaurant2) {
+        Date firstRestaurantDate = restaurant1.getDateEstablished();
+        Date secondRestaurantDate = restaurant1.getDateEstablished();
+        return firstRestaurantDate.compareTo(secondRestaurantDate);
+    }
+
 }
