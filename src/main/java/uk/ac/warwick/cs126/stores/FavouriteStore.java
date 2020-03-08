@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 
 import uk.ac.warwick.cs126.structures.MyArrayList;
 import uk.ac.warwick.cs126.util.DataChecker;
+import uk.ac.warwick.cs126.util.Sorter;
 import uk.ac.warwick.cs126.structures.BinarySearchTree;
 import uk.ac.warwick.cs126.structures.HashMap;
 import uk.ac.warwick.cs126.structures.Pair;
@@ -128,13 +129,15 @@ public class FavouriteStore implements IFavouriteStore {
     }
 
     public Favourite[] getFavouritesByCustomerID(Long id) {
-        // TODO
-        return new Favourite[0];
+        Favourite[] sortedArray = new Favourite[favourites.getSize()];
+        BinarySearchTree.inOrderSearchFavouriteCustomerID(favourites.getRoot(), sortedArray, 0, id);
+        return Sorter.quickSortFavouritesCustomerID(sortedArray);
     }
 
     public Favourite[] getFavouritesByRestaurantID(Long id) {
-        // TODO
-        return new Favourite[0];
+        Favourite[] sortedArray = new Favourite[favourites.getSize()];
+        BinarySearchTree.inOrderSearchFavouriteRestaurantID(favourites.getRoot(), sortedArray, 0, id);
+        return Sorter.quickSortFavouritesRestaurantID(sortedArray);
     }
 
     public Long[] getCommonFavouriteRestaurants(Long customer1ID, Long customer2ID) {
