@@ -164,13 +164,13 @@ public class RestaurantStore implements IRestaurantStore {
     }
 
     public Restaurant[] getRestaurantsByWarwickStars() {
-        // TODO
-        return new Restaurant[0];
+        Restaurant[] sortedArray = new Restaurant[restaurants.getSize()];
+        BinarySearchTree.inOrder(restaurants.getRoot(), sortedArray, 0);
+        return Sorter.quickSortRestaurantsStars(sortedArray);
     }
 
     public Restaurant[] getRestaurantsByRating(Restaurant[] restaurants) {
-        // TODO
-        return new Restaurant[0];
+        return Sorter.quickSortRestaurantsRating(restaurants);
     }
 
     public RestaurantDistance[] getRestaurantsByDistanceFrom(float latitude, float longitude) {
