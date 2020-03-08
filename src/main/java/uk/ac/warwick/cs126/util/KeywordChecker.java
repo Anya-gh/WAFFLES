@@ -91,7 +91,7 @@ public class KeywordChecker implements IKeywordChecker {
     public KeywordChecker() {
         // Initialise things here
     }
-
+    // should just use a hashmap
     public boolean isAKeyword(String word) {
         boolean returnValue = false;
         for (int i = 0; i < keywords.length; i++) {

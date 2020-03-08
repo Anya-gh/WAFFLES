@@ -260,6 +260,32 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
         }
     }
 
+    public static int inOrderSearchFavouriteCustomerID(ListElement<Pair<Long, Favourite>> node, Favourite[] array, int index, Long id) {
+        if (node != null) {
+            index = inOrder(node.getPrevious(), array, index);
+            Favourite currentFavourite = node.getValue().getValue();
+            if (node.isActive() && (currentFavourite.getCustomerID().equals(id))){
+                array[index] = node.getValue().getValue();
+                index++;
+            }
+            index = inOrder(node.getNext(), array, index);
+        }
+        return index;
+    }
+
+    public static int inOrderSearchFavouriteRestaurantID(ListElement<Pair<Long, Favourite>> node, Favourite[] array, int index, Long id) {
+        if (node != null) {
+            index = inOrder(node.getPrevious(), array, index);
+            Favourite currentFavourite = node.getValue().getValue();
+            if (node.isActive() && (currentFavourite.getRestaurantID().equals(id))){
+                array[index] = node.getValue().getValue();
+                index++;
+            }
+            index = inOrder(node.getNext(), array, index);
+        }
+        return index;
+    }
+
     public static <K extends Comparable<K>> int inOrder(ListElement<Pair<K, Customer>> node, Customer[] array, int index) {
         if (node != null) {
             index = inOrder(node.getPrevious(), array, index);

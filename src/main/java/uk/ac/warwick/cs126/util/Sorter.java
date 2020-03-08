@@ -3,6 +3,7 @@ import uk.ac.warwick.cs126.models.Customer;
 import uk.ac.warwick.cs126.models.Restaurant;
 import uk.ac.warwick.cs126.structures.MyArrayList;
 import uk.ac.warwick.cs126.models.RestaurantDistance;
+import uk.ac.warwick.cs126.models.Favourite;
 
 public class Sorter {
 
@@ -196,10 +197,10 @@ public class Sorter {
         current.add(restaurants.get(pointer));
         if (restaurants.size() > 1) {
             for (int i = 0; i < restaurants.size(); i++) {
-                if (StoreCompare.compareDateEstablished(restaurants.get(i), restaurants.get(pointer)) > 0) {
+                if (StoreCompare.compareDate(restaurants.get(i), restaurants.get(pointer)) > 0) {
                     right.add(restaurants.get(i));
                 }
-                else if (StoreCompare.compareDateEstablished(restaurants.get(i), restaurants.get(pointer)) < 0) {
+                else if (StoreCompare.compareDate(restaurants.get(i), restaurants.get(pointer)) < 0) {
                     left.add(restaurants.get(i));
                 }
                 else {
@@ -372,5 +373,91 @@ public class Sorter {
             return restaurants;
         }
         
+    }
+
+    public static Favourite[] quickSortFavouritesCustomerID(Favourite[] favourites) {
+        MyArrayList<Favourite> favouriteArrayList = new MyArrayList<>();
+        for (int i = 0; i < favourites.length; i++) {
+            favouriteArrayList.add(favourites[i]);
+        }
+        favouriteArrayList = quickSortFavouritesCustomerID(favouriteArrayList);
+        Favourite[] sortedArray = new Favourite[favouriteArrayList.size()];
+        for (int i = 0; i < favouriteArrayList.size(); i++) {
+            sortedArray[i] = favouriteArrayList.get(i);
+        }
+        return sortedArray;
+    }
+
+    private static MyArrayList<Favourite> quickSortFavouritesCustomerID(MyArrayList<Favourite> favourites) {
+        MyArrayList<Favourite> left = new MyArrayList<>();
+        MyArrayList<Favourite> right = new MyArrayList<>();
+        MyArrayList<Favourite> current = new MyArrayList<>();
+        int pointer = favourites.size() / 2;
+        current.add(favourites.get(pointer));
+        if (favourites.size() > 1) {
+            for (int i = 0; i < favourites.size(); i++) {
+                if(StoreCompare.compareDate(favourites.get(i), favourites.get(pointer)) > 0) {
+                    right.add(favourites.get(i));
+                }
+                else if (StoreCompare.compareDate(favourites.get(i), favourites.get(pointer)) < 0) {
+                    left.add(favourites.get(i));
+                }
+                else {
+                    if (StoreCompare.compareCustomerID(favourites.get(i), favourites.get(pointer)) > 0) {
+                        right.add(favourites.get(i));
+                    }
+                    else if (StoreCompare.compareCustomerID(favourites.get(i), favourites.get(pointer)) < 0) {
+                        left.add(favourites.get(i));
+                    }
+                }
+            }
+            return MyArrayList.concat(MyArrayList.concat(quickSortFavouritesCustomerID(left), current), quickSortFavouritesCustomerID(right));
+        }
+        else {
+            return favourites;
+        }
+    }
+
+    public static Favourite[] quickSortFavouritesRestaurantID(Favourite[] favourites) {
+        MyArrayList<Favourite> favouriteArrayList = new MyArrayList<>();
+        for (int i = 0; i < favourites.length; i++) {
+            favouriteArrayList.add(favourites[i]);
+        }
+        favouriteArrayList = quickSortFavouritesRestaurantID(favouriteArrayList);
+        Favourite[] sortedArray = new Favourite[favouriteArrayList.size()];
+        for (int i = 0; i < favouriteArrayList.size(); i++) {
+            sortedArray[i] = favouriteArrayList.get(i);
+        }
+        return sortedArray;
+    }
+
+    private static MyArrayList<Favourite> quickSortFavouritesRestaurantID(MyArrayList<Favourite> favourites) {
+        MyArrayList<Favourite> left = new MyArrayList<>();
+        MyArrayList<Favourite> right = new MyArrayList<>();
+        MyArrayList<Favourite> current = new MyArrayList<>();
+        int pointer = favourites.size() / 2;
+        current.add(favourites.get(pointer));
+        if (favourites.size() > 1) {
+            for (int i = 0; i < favourites.size(); i++) {
+                if(StoreCompare.compareDate(favourites.get(i), favourites.get(pointer)) > 0) {
+                    right.add(favourites.get(i));
+                }
+                else if (StoreCompare.compareDate(favourites.get(i), favourites.get(pointer)) < 0) {
+                    left.add(favourites.get(i));
+                }
+                else {
+                    if (StoreCompare.compareRestaurantID(favourites.get(i), favourites.get(pointer)) > 0) {
+                        right.add(favourites.get(i));
+                    }
+                    else if (StoreCompare.compareRestaurantID(favourites.get(i), favourites.get(pointer)) < 0) {
+                        left.add(favourites.get(i));
+                    }
+                }
+            }
+            return MyArrayList.concat(MyArrayList.concat(quickSortFavouritesRestaurantID(left), current), quickSortFavouritesRestaurantID(right));
+        }
+        else {
+            return favourites;
+        }
     }
 }

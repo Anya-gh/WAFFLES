@@ -1,6 +1,7 @@
 package uk.ac.warwick.cs126.util;
 
 import uk.ac.warwick.cs126.models.Customer;
+import uk.ac.warwick.cs126.models.Favourite;
 import uk.ac.warwick.cs126.models.Restaurant;
 import uk.ac.warwick.cs126.models.RestaurantDistance;
 import java.util.Date;
@@ -22,6 +23,18 @@ public class StoreCompare {
         return firstCustomerID.compareTo(secondCustomerID);
     }
 
+    public static int compareCustomerID(Favourite favourite1, Favourite favourite2) {
+        Long firstCustomerID = favourite1.getCustomerID();
+        Long secondCustomerID = favourite2.getCustomerID();
+        return firstCustomerID.compareTo(secondCustomerID);
+    }
+
+    public static int compareRestaurantID(Favourite favourite1, Favourite favourite2) {
+        Long firstRestaurantID = favourite1.getRestaurantID();
+        Long secondRestaurantID = favourite2.getRestaurantID();
+        return firstRestaurantID.compareTo(secondRestaurantID);
+    }
+
     public static int compareFirstName(Customer customer1, Customer customer2) {
         String firstCustomerName = customer1.getFirstName();
         String secondCustomerName = customer2.getFirstName();
@@ -40,16 +53,16 @@ public class StoreCompare {
         return firstRestaurantName.compareTo(secondRestaurantName);
     }
 
-    public static int compareDateJoined(Customer customer1, Customer customer2) {
-        Date firstCustomerDate = customer1.getDateJoined();
-        Date secondCustomerDate = customer2.getDateJoined();
-        return firstCustomerDate.compareTo(secondCustomerDate);
-    }
-
-    public static int compareDateEstablished(Restaurant restaurant1, Restaurant restaurant2) {
+    public static int compareDate(Restaurant restaurant1, Restaurant restaurant2) {
         Date firstRestaurantDate = restaurant1.getDateEstablished();
         Date secondRestaurantDate = restaurant2.getDateEstablished();
         return firstRestaurantDate.compareTo(secondRestaurantDate);
+    }
+
+    public static int compareDate(Favourite favourite1, Favourite favourite2) {
+        Date firstDateFavourited = favourite1.getDateFavourited();
+        Date secondDateFavourited = favourite2.getDateFavourited();
+        return firstDateFavourited.compareTo(secondDateFavourited);
     }
 
     public static int compareStars(Restaurant restaurant1, Restaurant restaurant2) {
