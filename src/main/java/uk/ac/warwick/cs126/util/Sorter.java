@@ -2,6 +2,7 @@ package uk.ac.warwick.cs126.util;
 import uk.ac.warwick.cs126.models.Customer;
 import uk.ac.warwick.cs126.models.Restaurant;
 import uk.ac.warwick.cs126.structures.MyArrayList;
+import uk.ac.warwick.cs126.models.RestaurantDistance;
 
 public class Sorter {
 
@@ -327,4 +328,49 @@ public class Sorter {
         }
     }
 
+    public static RestaurantDistance[] quickSortRestaurantsDistance(Restaurant[] restaurants, Float lat, Float lon) {
+        MyArrayList<RestaurantDistance> restaurantArrayList = new MyArrayList<>();
+        for (int i = 0; i < restaurants.length; i++) {
+            Float distance = HaversineDistanceCalculator.inKilometres(restaurants[i].getLatitude(), restaurants[i].getLongitude(), lat, lon);
+            RestaurantDistance temp = new RestaurantDistance(restaurants[i], distance);
+            restaurantArrayList.add(temp);
+        }
+        restaurantArrayList = quickSortRestaurantsDistance(restaurantArrayList);
+        RestaurantDistance[] sortedArray = new RestaurantDistance[restaurantArrayList.size()];
+        for (int i = 0; i < restaurantArrayList.size(); i++) {
+            sortedArray[i] = restaurantArrayList.get(i);
+        }
+        return sortedArray;
+    }
+
+    private static MyArrayList<RestaurantDistance> quickSortRestaurantsDistance(MyArrayList<RestaurantDistance> restaurants) {
+        MyArrayList<RestaurantDistance> left = new MyArrayList<>();
+        MyArrayList<RestaurantDistance> right = new MyArrayList<>();
+        MyArrayList<RestaurantDistance> current = new MyArrayList<>();
+        int pointer = restaurants.size() / 2;
+        current.add(restaurants.get(pointer));
+        if (restaurants.size() > 1) {
+            for (int i = 0; i < restaurants.size(); i++) {
+                if(StoreCompare.compareDistance(restaurants.get(i), restaurants.get(pointer)) > 0) {
+                    right.add(restaurants.get(i));
+                }
+                else if (StoreCompare.compareDistance(restaurants.get(i), restaurants.get(pointer)) < 0) {
+                    left.add(restaurants.get(i));
+                }
+                else {
+                    if (StoreCompare.compareID(restaurants.get(i).getRestaurant(), restaurants.get(pointer).getRestaurant()) > 0) {
+                        right.add(restaurants.get(i));
+                    }
+                    else if (StoreCompare.compareID(restaurants.get(i).getRestaurant(), restaurants.get(pointer).getRestaurant()) < 0) {
+                        left.add(restaurants.get(i));
+                    }
+                }
+            }
+            return MyArrayList.concat(MyArrayList.concat(quickSortRestaurantsDistance(left), current), quickSortRestaurantsDistance(right));
+        }
+        else {
+            return restaurants;
+        }
+        
+    }
 }

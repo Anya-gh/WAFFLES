@@ -2,6 +2,7 @@ package uk.ac.warwick.cs126.util;
 
 import uk.ac.warwick.cs126.models.Customer;
 import uk.ac.warwick.cs126.models.Restaurant;
+import uk.ac.warwick.cs126.models.RestaurantDistance;
 import java.util.Date;
 
 public class StoreCompare {
@@ -61,6 +62,12 @@ public class StoreCompare {
         Float firstRating = restaurant1.getCustomerRating();
         Float secondRating = restaurant2.getCustomerRating();
         return firstRating.compareTo(secondRating);
+    }
+
+    public static int compareDistance(RestaurantDistance restaurant1, RestaurantDistance restaurant2) {
+        Float firstDistance = restaurant1.getDistance();
+        Float secondDistance = restaurant2.getDistance();
+        return firstDistance.compareTo(secondDistance);
     }
 
 }

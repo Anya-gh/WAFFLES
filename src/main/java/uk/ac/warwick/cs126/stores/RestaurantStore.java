@@ -174,13 +174,13 @@ public class RestaurantStore implements IRestaurantStore {
     }
 
     public RestaurantDistance[] getRestaurantsByDistanceFrom(float latitude, float longitude) {
-        // TODO
-        return new RestaurantDistance[0];
+        Restaurant[] sortedArray = new Restaurant[restaurants.getSize()];
+        BinarySearchTree.inOrder(restaurants.getRoot(), sortedArray, 0);
+        return Sorter.quickSortRestaurantsDistance(sortedArray, latitude, longitude);
     }
 
     public RestaurantDistance[] getRestaurantsByDistanceFrom(Restaurant[] restaurants, float latitude, float longitude) {
-        // TODO
-        return new RestaurantDistance[0];
+        return Sorter.quickSortRestaurantsDistance(restaurants, latitude, longitude);
     }
 
     public Restaurant[] getRestaurantsContaining(String searchTerm) {
