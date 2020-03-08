@@ -184,9 +184,11 @@ public class RestaurantStore implements IRestaurantStore {
     }
 
     public Restaurant[] getRestaurantsContaining(String searchTerm) {
-        // TODO
-        // String searchTermConverted = stringFormatter.convertAccents(searchTerm);
-        // String searchTermConvertedFaster = stringFormatter.convertAccentsFaster(searchTerm);
-        return new Restaurant[0];
+        String searchTermConvertedFaster = StringFormatter.convertAccentsFaster(searchTerm);
+        BinarySearchTree<String, Restaurant> customersByNameTree = new BinarySearchTree<>();
+        BinarySearchTree.inOrderSearchRestaurant(restaurants.getRoot(), customersByNameTree, searchTermConvertedFaster);
+        Restaurant[] sortedArray = new Restaurant[customersByNameTree.getSize()];
+        BinarySearchTree.inOrder(customersByNameTree.getRoot(), sortedArray, 0);
+        return sortedArray;
     }
 }

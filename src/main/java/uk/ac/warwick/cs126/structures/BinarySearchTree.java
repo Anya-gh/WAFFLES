@@ -4,6 +4,7 @@ import uk.ac.warwick.cs126.models.Customer;
 import uk.ac.warwick.cs126.models.Favourite;
 import uk.ac.warwick.cs126.models.Restaurant;
 import uk.ac.warwick.cs126.util.StringFormatter;
+import uk.ac.warwick.cs126.util.ConvertToPlace;
 
 import uk.ac.warwick.cs126.util.StringFormatter;
 
@@ -170,6 +171,33 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
                         }
                     }
                 }
+                else if ((value instanceof Restaurant) && (key instanceof String)) {
+                    Restaurant addRestaurant = (Restaurant) value;
+                    Restaurant currentRestaurant = (Restaurant) temp.getValue().getValue();
+                    Long addRestaurantID = (Long) addRestaurant.getID();
+                    Long currentRestaurantID = (Long) currentRestaurant.getID();
+                    if (addRestaurantID.compareTo(currentRestaurantID) < 0) {
+                        if (temp.getPrevious() == null) {
+                            temp.setPrevious(newNode);
+                            size++;
+                            break;
+                        }
+                        else {
+                            temp = temp.getPrevious();
+                        }
+                    }
+                    else if (addRestaurantID.compareTo(currentRestaurantID) > 0) {
+                        if (temp.getNext() == null) {
+                            temp.setNext(newNode);
+                            size++;
+                            break;
+                        }
+                    }
+                    else {
+                        returnValue = false;
+                        break;
+                    }
+                }
                 else {
                     returnValue = false;
                     break;
@@ -209,6 +237,24 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
             }
             // right tree
             inOrderSearch(node.getNext(), tree, searchTerm);
+        }
+    }
+
+    public static void inOrderSearchRestaurant(ListElement<Pair<Long, Restaurant>> node, BinarySearchTree<String, Restaurant> tree, String searchTerm) {
+        if (node != null) {
+            ConvertToPlace placeConverter = new ConvertToPlace();
+            String placeName = placeConverter.convert(node.getValue().getValue().getLatitude(), node.getValue().getValue().getLongitude()).getName();
+            String checkValue = StringFormatter.convertAccentsFaster(node.getValue().getValue().getName() + " " + node.getValue().getValue().getCuisine() + " " + placeName).toLowerCase();
+            String checkTerm = searchTerm.toLowerCase();
+            // left tree
+            inOrderSearchRestaurant(node.getPrevious(), tree, searchTerm);
+            // current
+            if ((checkValue.contains(checkTerm)) && (node.isActive())) {
+                Restaurant restaurant = node.getValue().getValue();
+                tree.add(restaurant.getName(), restaurant);
+            }
+            // right tree
+            inOrderSearchRestaurant(node.getNext(), tree, searchTerm);
         }
     }
 
