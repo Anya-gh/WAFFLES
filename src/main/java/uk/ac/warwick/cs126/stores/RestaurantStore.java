@@ -24,6 +24,7 @@ import uk.ac.warwick.cs126.util.HaversineDistanceCalculator;
 import uk.ac.warwick.cs126.util.DataChecker;
 import uk.ac.warwick.cs126.util.StringFormatter;
 import uk.ac.warwick.cs126.util.Sorter;
+import uk.ac.warwick.cs126.util.ConvertToPlace;
 
 public class RestaurantStore implements IRestaurantStore {
 
@@ -31,6 +32,7 @@ public class RestaurantStore implements IRestaurantStore {
     private DataChecker dataChecker;
     private BinarySearchTree<Long, Restaurant> restaurants;
     private HashMap<Long, Restaurant> blacklistedIDs;
+    private ConvertToPlace placeConverter;
 
     public RestaurantStore() {
         // Initialise variables here
@@ -38,6 +40,7 @@ public class RestaurantStore implements IRestaurantStore {
         dataChecker = new DataChecker();
         restaurants = new BinarySearchTree<>();
         blacklistedIDs = new HashMap<>();
+        placeConverter = new ConvertToPlace();
     }
 
     public Restaurant[] loadRestaurantDataToArray(InputStream resource) {
@@ -186,7 +189,7 @@ public class RestaurantStore implements IRestaurantStore {
     public Restaurant[] getRestaurantsContaining(String searchTerm) {
         String searchTermConvertedFaster = StringFormatter.convertAccentsFaster(searchTerm);
         BinarySearchTree<String, Restaurant> customersByNameTree = new BinarySearchTree<>();
-        BinarySearchTree.inOrderSearchRestaurant(restaurants.getRoot(), customersByNameTree, searchTermConvertedFaster);
+        BinarySearchTree.inOrderSearchRestaurant(restaurants.getRoot(), customersByNameTree, searchTermConvertedFaster, placeConverter);
         Restaurant[] sortedArray = new Restaurant[customersByNameTree.getSize()];
         BinarySearchTree.inOrder(customersByNameTree.getRoot(), sortedArray, 0);
         return sortedArray;

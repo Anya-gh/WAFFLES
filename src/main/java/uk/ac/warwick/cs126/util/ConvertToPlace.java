@@ -10,18 +10,20 @@ import java.nio.file.Paths;
 import org.apache.commons.io.IOUtils;
 
 public class ConvertToPlace implements IConvertToPlace {
+    private Place[] placesArray;
 
     public ConvertToPlace() {
+        placesArray = this.getPlacesArray();
         // Initialise things here
     }
 
     public Place convert(float latitude, float longitude) {
         Place returnValue = new Place("", "", 0.0f, 0.0f);
-        Place[] placesArray = this.getPlacesArray();
         for (int i = 0; i < placesArray.length; i++) {
-          Place currentPlace = placesArray[i];
+          Place currentPlace = this.placesArray[i];
           if ((latitude == currentPlace.getLatitude()) && (longitude == currentPlace.getLongitude())) {
             returnValue = new Place(currentPlace.getName(), currentPlace.getPostcode(), latitude, longitude);
+            break;
           }
         }
         return returnValue;

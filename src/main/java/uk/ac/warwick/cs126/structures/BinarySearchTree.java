@@ -192,6 +192,9 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
                             size++;
                             break;
                         }
+                        else {
+                            temp = temp.getNext();
+                        }
                     }
                     else {
                         returnValue = false;
@@ -240,21 +243,20 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
         }
     }
 
-    public static void inOrderSearchRestaurant(ListElement<Pair<Long, Restaurant>> node, BinarySearchTree<String, Restaurant> tree, String searchTerm) {
+    public static void inOrderSearchRestaurant(ListElement<Pair<Long, Restaurant>> node, BinarySearchTree<String, Restaurant> tree, String searchTerm, ConvertToPlace placeConverter) {
         if (node != null) {
-            ConvertToPlace placeConverter = new ConvertToPlace();
             String placeName = placeConverter.convert(node.getValue().getValue().getLatitude(), node.getValue().getValue().getLongitude()).getName();
             String checkValue = StringFormatter.convertAccentsFaster(node.getValue().getValue().getName() + " " + node.getValue().getValue().getCuisine() + " " + placeName).toLowerCase();
             String checkTerm = searchTerm.toLowerCase();
             // left tree
-            inOrderSearchRestaurant(node.getPrevious(), tree, searchTerm);
+            inOrderSearchRestaurant(node.getPrevious(), tree, searchTerm, placeConverter);
             // current
             if ((checkValue.contains(checkTerm)) && (node.isActive())) {
                 Restaurant restaurant = node.getValue().getValue();
                 tree.add(restaurant.getName(), restaurant);
             }
             // right tree
-            inOrderSearchRestaurant(node.getNext(), tree, searchTerm);
+            inOrderSearchRestaurant(node.getNext(), tree, searchTerm, placeConverter);
         }
     }
 
